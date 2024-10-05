@@ -28,7 +28,7 @@ export class UsersController {
   async findAll() {
     const user = await this.usersService.findAll();
     return {
-      message: "user find all successfully",
+      message: "find all user successfully",
       success: true,
       data: {
         length: user.length,
