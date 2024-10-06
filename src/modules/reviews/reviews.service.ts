@@ -31,7 +31,8 @@ export class ReviewsService {
     return `This action updates a #${id} review`;
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} review`;
+  async remove(id: string) {
+    const review = await this.reviewModel.findByIdAndDelete(id);
+    return review;
   }
 }

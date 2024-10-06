@@ -6,12 +6,15 @@ import {
   Patch,
   Param,
   Delete,
-} from '@nestjs/common';
-import { ReviewsService } from './reviews.service';
-import { CreateReviewDto } from './dto/create-review.dto';
-import { UpdateReviewDto } from './dto/update-review.dto';
+  Res,
+  HttpStatus,
+} from "@nestjs/common";
+import { ReviewsService } from "./reviews.service";
+import { CreateReviewDto } from "./dto/create-review.dto";
+import { UpdateReviewDto } from "./dto/update-review.dto";
+import { Response } from "express";
 
-@Controller('reviews')
+@Controller("reviews")
 export class ReviewsController {
   constructor(private readonly reviewsService: ReviewsService) {}
 
@@ -20,7 +23,7 @@ export class ReviewsController {
     let review = await this.reviewsService.create(createReviewDto);
     return {
       success: true,
-      message: 'Review add successfully',
+      message: "Review add successfully",
       data: {
         review: review,
       },
@@ -32,7 +35,7 @@ export class ReviewsController {
     let review = await this.reviewsService.findAll();
     return {
       success: true,
-      message: 'Review find all successfully',
+      message: "Review find all successfully",
       data: {
         length: review.length,
         review: review,
@@ -40,25 +43,38 @@ export class ReviewsController {
     };
   }
 
-  @Get(':id')
-  async findOne(@Param('id') id: string) {
+  @Get(":id")
+  async findOne(@Param("id") id: string) {
     let review = await this.reviewsService.findOne(id);
     return {
       success: true,
-      message: 'Review find successfully',
+      message: "Review find successfully",
       data: {
         review: review,
       },
     };
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateReviewDto: UpdateReviewDto) {
+  @Patch(":id")
+  update(@Param("id") id: string, @Body() updateReviewDto: UpdateReviewDto) {
     return this.reviewsService.update(id, updateReviewDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.reviewsService.remove(id);
+  @Delete(":id")
+  async remove(@Param("id") id: string, @Res() res: Response) {
+    let review = await this.reviewsService.remove(id);
+
+    if (!review) {
+      return res.status(HttpStatus.NOT_FOUND).json({
+        success: false,
+        message: "review not found",
+        data: { review: null },
+      });
+    }
+    return res.status(HttpStatus.ACCEPTED).json({
+      success: true,
+      message: "review delete successfully",
+      data: { review: null },
+    });
   }
 }
