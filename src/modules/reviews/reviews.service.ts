@@ -1,15 +1,15 @@
-import { Injectable } from '@nestjs/common';
-import { CreateReviewDto } from './dto/create-review.dto';
-import { UpdateReviewDto } from './dto/update-review.dto';
-import { InjectModel } from '@nestjs/mongoose';
+import { Injectable } from "@nestjs/common";
+import { CreateReviewDto } from "./dto/create-review.dto";
+import { UpdateReviewDto } from "./dto/update-review.dto";
+import { InjectModel } from "@nestjs/mongoose";
 
-import { Model } from 'mongoose';
-import { REVIEW_MODEL, REVIEW_TYPE } from 'src/schema/review.schema';
+import { Model } from "mongoose";
+import { REVIEW_MODEL, REVIEW_TYPE } from "src/schema/review.schema";
 
 @Injectable()
 export class ReviewsService {
   constructor(
-    @InjectModel(REVIEW_MODEL) private reviewModel: Model<REVIEW_TYPE>,
+    @InjectModel(REVIEW_MODEL) private reviewModel: Model<REVIEW_TYPE>
   ) {}
 
   async create(createReviewDto: CreateReviewDto) {

@@ -16,11 +16,14 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
+  async create(@Body() createUserDto: CreateUserDto) {
+    const user = await this.usersService.create(createUserDto);
     return {
-      message: "user create successfully",
       success: true,
-      data: this.usersService.create(createUserDto),
+      message: "user create successfully",
+      data: {
+        user: user,
+      },
     };
   }
 
@@ -28,8 +31,8 @@ export class UsersController {
   async findAll() {
     const user = await this.usersService.findAll();
     return {
-      message: "find all user successfully",
       success: true,
+      message: "find all user successfully",
       data: {
         length: user.length,
         user: user,
@@ -40,8 +43,8 @@ export class UsersController {
   @Get(":id")
   findOne(@Param("id") id: string) {
     return {
-      message: "user by id successfully",
       success: true,
+      message: "user by id successfully",
       data: this.usersService.findOne(id),
     };
   }
@@ -49,8 +52,8 @@ export class UsersController {
   @Patch(":id")
   update(@Param("id") id: string, @Body() updateUserDto: UpdateUserDto) {
     return {
-      message: "user update successfully",
       success: true,
+      message: "user update successfully",
       data: this.usersService.update(id, updateUserDto),
     };
   }
@@ -58,8 +61,8 @@ export class UsersController {
   @Delete(":id")
   remove(@Param("id") id: string) {
     return {
-      message: "user delet successfully",
       success: true,
+      message: "user delet successfully",
       data: this.usersService.remove(id),
     };
   }
